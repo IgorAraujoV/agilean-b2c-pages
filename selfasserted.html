@@ -123,39 +123,16 @@
        caixas são o BACKGROUND do próprio input: 6 células via repeating-gradient
        + letter-spacing alinhando cada dígito sobre uma célula. Pitch = 46px
        (célula 38px + gap 8px); ajustar se desalinhar no cliente real. */
+    /* Código de verificação: input normal (herda a caixa padrão acima), só
+       centralizado + monospace pra ficar legível. Sem células (CSS-only não
+       alinha direito + não dá pra limitar a 6 sem JS). */
     #api #emailVerificationCode {
-      box-sizing: border-box;
-      width: 276px;          /* exatamente 6 células (pitch 46 × 6 − 8 do último gap) */
-      max-width: 100%;
-      height: 52px;
-      overflow: hidden;
-      border: none !important;
-      border-radius: 0 !important;
-      background-color: transparent !important;
-      /* 6 células bege desenhadas via gradiente, TRAVADAS em 6 (background-size
-         + no-repeat) pra não repetir infinito se digitarem além do código. */
-      background-image: repeating-linear-gradient(
-        90deg,
-        var(--neutral-bg) 0, var(--neutral-bg) 38px,
-        transparent 38px, transparent 46px
-      );
-      background-repeat: no-repeat;
-      background-size: 276px 100%;
-      box-shadow: none !important;
+      text-align: center;
       font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-      font-weight: 800;
-      font-size: 24px;
-      line-height: 52px;
-      letter-spacing: 32px;  /* alinha cada dígito ao centro da célula (pitch 46) */
-      text-indent: 12px;
-      padding: 0;
-      color: var(--neutral-text);
-      caret-color: var(--brand-50);
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 4px;
     }
-    #api #emailVerificationCode:focus { box-shadow: none !important; border: none !important; }
-    /* Placeholder ("Código de Verificação") herdaria o letter-spacing gigante e
-       se espalharia feio pelas células — escondido; as células vazias já indicam. */
-    #api #emailVerificationCode::placeholder { color: transparent; }
 
     /* Botões primários (ação do passo): Verificar / Enviar código.
        #continue é rebaixado a secundário logo abaixo — na etapa de verificar
