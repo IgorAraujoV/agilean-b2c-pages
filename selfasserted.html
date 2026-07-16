@@ -66,6 +66,9 @@
       display: flex; align-items: center; justify-content: center;
       color: #fff; font-weight: 800; font-size: 24px;
     }
+    /* Logo real da Agilean (SVG hospedado no GitHub Pages); filtro deixa branca
+       sobre o quadrado laranja, igual ao login do app. */
+    .agl-mark img { width: 60%; height: 60%; filter: brightness(0) invert(1); }
 
     /* ===== Elementos injetados pelo B2C em #api ===== */
     #api { width: 100%; }
@@ -176,9 +179,12 @@
     #api button:active { transform: translateY(1px); }
 
     /* Botões secundários: reenviar código, alterar email, Cancelar */
+    /* "Cancelar" não faz sentido no fluxo de convite (aborta o reset e volta
+       pro app sem senha definida) — escondido. */
+    #api #cancel { display: none !important; }
+
     #api #emailVerificationControl_but_send_new_code,
-    #api #emailVerificationControl_but_change_claims,
-    #api #cancel {
+    #api #emailVerificationControl_but_change_claims {
       width: 100%;
       padding: 10px;
       font-size: 13.5px; font-weight: 600;
@@ -211,7 +217,7 @@
 <body>
   <div class="agl-wrap">
     <div class="agl-card">
-      <div class="agl-mark">A</div>
+      <div class="agl-mark"><img src="https://igoraraujov.github.io/agilean-b2c-pages/logo.svg" alt="Agilean" /></div>
       <!-- B2C injeta título dinâmico + formulário aqui -->
       <div id="api"></div>
     </div>
