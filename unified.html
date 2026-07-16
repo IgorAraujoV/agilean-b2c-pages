@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Agilean — Entrar</title>
+  <!--
+    Página custom do Azure AD B2C (user flow B2C_1_platform_susi*, page: CombinedSigninAndSignup).
+    O B2C injeta o formulário dentro de <div id="api"> e trava a largura do container (~450px),
+    então usamos um card único centralizado (não split como o LoginScreen do app).
+    Scripts custom NÃO executam (o B2C remove por segurança) — signup e o divisor "OU" são
+    escondidos via CSS. Requisitos de hospedagem: HTTPS + CORS (allow b2clogin.com).
+    DÉBITO: hoje servido do Vite (public/b2c/) via túnel; migrar pra blob/CDN quando devops puder.
+  -->
+  <style>
+    :root {
+      --brand-99: #FFF6EF;
+      --brand-95: #FFF0E6;
+      --brand-90: #FEDBC6;
+      --brand-50: #FD7236;
+      --brand-40: #F85D1A;
+      --neutral-bg: #faf8f6;
+      --neutral-text: #3d2e22;
+      --neutral-text-muted: #5a4a3c;
+      --neutral-subtle: #8c7a6b;
+      --neutral-placeholder: #c4b5a5;
+      --neutral-90: #e9e2db;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0; padding: 0; min-height: 100%;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: var(--neutral-text);
+      background: linear-gradient(135deg, var(--brand-99), var(--brand-95));
+    }
+
+    /* Neutraliza o wrapper estreito do template B2C e centraliza o card */
+    #panel, .container, [data-tenant-branding-background], [data-tenant-branding-background-color] {
+      background: transparent !important;
+      max-width: none !important;
+      width: auto !important;
+      box-shadow: none !important;
+      border: none !important;
+    }
+
+    .agl-wrap {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 32px 16px;
+    }
+
+    .agl-card {
+      width: 100%; max-width: 380px;
+      background: #fff;
+      border: 1px solid var(--neutral-90);
+      border-radius: 18px;
+      padding: 40px 32px 28px;
+      box-shadow: 0 12px 40px rgba(61,46,34,0.10);
+      text-align: center;
+    }
+
+    .agl-mark {
+      width: 60px; height: 60px; margin: 0 auto 20px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--brand-50), var(--brand-40));
+      box-shadow: 0 8px 24px rgba(253,114,54,0.28);
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-weight: 800; font-size: 26px;
+    }
+    .agl-title { font-size: 22px; font-weight: 800; margin: 0 0 6px; letter-spacing: -0.01em; }
+    .agl-sub { font-size: 13.5px; color: var(--neutral-subtle); margin: 0 auto 26px; max-width: 300px; line-height: 1.5; }
+
+    /* ===== Elementos que o B2C injeta em #api ===== */
+    #api { width: 100%; text-align: left; }
+
+    /* Esconde título/intro padrão do B2C (usamos os nossos acima) */
+    #api .heading, #api .intro { display: none !important; }
+
+    #api .entry, #api .entry-item { width: 100%; }
+    #api .entry-item { margin-bottom: 16px; }
+    #api label {
+      display: block; font-size: 13px; font-weight: 600;
+      color: var(--neutral-text-muted); margin-bottom: 6px;
+    }
+
+    /* Erro do B2C sempre ABAIXO do input (o B2C injeta o .error antes do input no DOM).
+       Default nos filhos = junto do input (order 2); label no topo; erro embaixo; forgot por último.
+       O forgot vive dentro de <div class="password-label"> (junto do label "Senha"); display:contents
+       "dissolve" esse wrapper pra label e forgot virarem itens do flex do entry-item e o order pegar. */
+    #api .entry-item { display: flex; flex-direction: column; }
+    #api .entry-item > * { order: 2; }
+    #api .entry-item > label { order: 1; margin-bottom: 6px; }
+    #api .password-label { display: contents; }
+    #api .password-label label { order: 1; margin-bottom: 6px; }
+    #api .entry-item > .error, #api .entry-item > .itemLevel { order: 3; margin-top: 4px; }
+    #api #forgotPassword { order: 4; align-self: flex-end; text-align: right; }
+
+    #api input[type="text"],
+    #api input[type="email"],
+    #api input[type="password"],
+    #api input.textInput {
+      width: 100%;
+      padding: 11px 13px;
+      font-size: 14px;
+      color: var(--neutral-text);
+      background: #fff;
+      border: 1px solid var(--neutral-90);
+      border-radius: 10px;
+      outline: none;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    #api input:focus {
+      border-color: var(--brand-50);
+      box-shadow: 0 0 0 3px rgba(253,114,54,0.15);
+    }
+    #api input::placeholder { color: var(--neutral-placeholder); }
+
+    /* Botão "Entrar" */
+    #api button, #api .buttons button, #api #next {
+      width: 100%;
+      padding: 12px;
+      font-size: 14px; font-weight: 700;
+      color: #fff;
+      background: var(--brand-50);
+      border: none; border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 2px 12px rgba(253,114,54,0.25);
+      transition: background .15s, transform .05s;
+      margin-top: 4px;
+    }
+    #api button:hover, #api #next:hover { background: var(--brand-40); }
+    #api button:active { transform: translateY(1px); }
+
+    /* Link "Esqueceu a senha?" — reposicionado pro rodapé do bloco de senha, alinhado à direita */
+    #api #forgotPassword {
+      display: inline-block;
+      color: var(--brand-50);
+      font-size: 12.5px; font-weight: 600;
+      text-decoration: none;
+      margin-top: 8px;
+    }
+    #api #forgotPassword:hover { text-decoration: underline; }
+
+    /* ===== Escondidos: SIGN UP e divisor "OU" de logins sociais (não usamos) ===== */
+    #api .create, #api #createAccount, #api .create-account, .create,
+    #api .divider, #api .options, #api .claims-provider-list-buttons {
+      display: none !important;
+    }
+
+    /* Erros de validação do B2C */
+    #api .error, #api .itemLevel .error, #api .pageLevel .error {
+      color: #d33a2c; font-size: 12.5px; margin: 4px 0 0;
+    }
+    /* O B2C envolve o texto do erro num <p> com margin default do browser (gap grande) */
+    #api .error p, #api .itemLevel p, #api .pageLevel p { margin: 0; line-height: 1.4; }
+
+    .agl-divider { display: flex; align-items: center; gap: 12px; margin: 26px 0 14px; }
+    .agl-divider .line { flex: 1; height: 1px; background: var(--neutral-90); }
+    .agl-divider span { font-size: 11.5px; color: var(--neutral-placeholder); }
+    .agl-foot { font-size: 12px; color: var(--neutral-placeholder); text-align: center; margin: 0; line-height: 1.5; }
+  </style>
+</head>
+<body>
+  <div class="agl-wrap">
+    <div class="agl-card">
+      <div class="agl-mark">A</div>
+      <h1 class="agl-title">Entrar na plataforma</h1>
+      <p class="agl-sub">Acesse suas obras com sua conta corporativa Agilean.</p>
+
+      <!-- O B2C injeta o formulário aqui -->
+      <div id="api"></div>
+
+      <div class="agl-divider">
+        <div class="line"></div><span>Autenticação segura</span><div class="line"></div>
+      </div>
+      <p class="agl-foot">Não tem acesso? Fale com o administrador da sua obra.</p>
+    </div>
+  </div>
+</body>
+</html>
