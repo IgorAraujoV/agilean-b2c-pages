@@ -156,10 +156,12 @@
     }
     #api #emailVerificationCode:focus { box-shadow: none !important; border: none !important; }
 
-    /* Botões primários: Continuar / Verificar / Enviar código */
+    /* Botões primários (ação do passo): Verificar / Enviar código.
+       #continue é rebaixado a secundário logo abaixo — na etapa de verificar
+       email ele ainda "não faz sentido" (email não confirmado), então não deve
+       competir visualmente com "Enviar código de verificação". */
     #api button,
     #api .buttons button,
-    #api #continue,
     #api #emailVerificationControl_but_verify_code,
     #api #emailVerificationControl_but_send_code {
       width: 100%;
@@ -173,10 +175,21 @@
       transition: background .15s, transform .05s;
       margin-top: 6px;
     }
-    #api button:hover, #api #continue:hover,
+    #api button:hover,
     #api #emailVerificationControl_but_verify_code:hover,
     #api #emailVerificationControl_but_send_code:hover { background: var(--brand-40); }
     #api button:active { transform: translateY(1px); }
+
+    /* #continue = secundário (outline). Id-selector vence o `#api button` acima.
+       Sinaliza que não é a ação do passo atual (verificar email) sem escondê-lo. */
+    #api #continue {
+      background: #fff !important;
+      color: var(--brand-50) !important;
+      border: 1.5px solid var(--neutral-90) !important;
+      box-shadow: none !important;
+      font-weight: 600 !important;
+    }
+    #api #continue:hover { background: var(--brand-99) !important; }
 
     /* Botões secundários: reenviar código, alterar email, Cancelar */
     /* "Cancelar" não faz sentido no fluxo de convite (aborta o reset e volta
