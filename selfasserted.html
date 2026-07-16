@@ -133,6 +133,16 @@
       font-weight: 700;
       letter-spacing: 4px;
     }
+    /* Placeholder do B2C ("Código de Verificação") herdaria o monospace +
+       letter-spacing e ficaria esticado. Renderiza normal e centralizado.
+       (Trocar o TEXTO por "XXXXXX" exigiria JS — o texto é do B2C.) */
+    #api #emailVerificationCode::placeholder {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-weight: 400;
+      letter-spacing: normal;
+      font-size: 14px;
+      color: var(--neutral-placeholder);
+    }
 
     /* Botões primários (ação do passo): Verificar / Enviar código.
        #continue é rebaixado a secundário logo abaixo — na etapa de verificar
