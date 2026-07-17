@@ -80,7 +80,7 @@
     }
 
     #api .attr, #api .entry, #api .entry-item { width: 100%; }
-    #api .entry-item { margin-bottom: 14px; }
+    #api .entry-item { margin-bottom: 22px; }
     #api label { display: block; font-size: 13px; font-weight: 600; color: var(--neutral-text-muted); margin-bottom: 6px; }
 
     /* Erro do B2C sempre ABAIXO do input (injetado antes do input no DOM).
@@ -183,6 +183,9 @@
     /* "Cancelar" não faz sentido no fluxo de convite (aborta o reset e volta
        pro app sem senha definida) — escondido. */
     #api #cancel { display: none !important; }
+    /* "Alterar o email" não faz sentido no convite (email é fixo, pré-criado) —
+       escondido; na tela pós-verificação sobra só o email + Continuar. */
+    #api #emailVerificationControl_but_change_claims { display: none !important; }
 
     #api #emailVerificationControl_but_send_new_code,
     #api #emailVerificationControl_but_change_claims {
@@ -206,10 +209,13 @@
     /* Mensagens de sucesso/verificação */
     #api .verificationInfoText, #api .verifying-modal { font-size: 13px; color: var(--neutral-subtle); }
     #api .error, #api .itemLevel .error, #api .pageLevel .error {
-      color: #d33a2c; font-size: 12.5px; margin: 4px 0 0;
+      color: #d33a2c; font-size: 12.5px; margin: 6px 0 0; line-height: 1.55;
     }
     /* O B2C envolve o texto do erro num <p> com margin default do browser (gap grande) */
-    #api .error p, #api .itemLevel p, #api .pageLevel p { margin: 0; line-height: 1.4; }
+    #api .error p, #api .itemLevel p, #api .pageLevel p { margin: 0 0 2px; line-height: 1.55; }
+    /* Lista de requisitos de senha (- minúscula, - número, ...) respirada. */
+    #api .error ul, #api .itemLevel ul { margin: 4px 0 0; padding-left: 16px; }
+    #api .error li, #api .itemLevel li { margin: 2px 0; line-height: 1.5; }
 
     /* Link "Cancelar" que o B2C às vezes coloca no topo */
     .cancel, a.cancel { color: var(--brand-50) !important; }
