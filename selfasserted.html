@@ -77,10 +77,11 @@
 
     /* Loading REAL do B2C = jQuery simplemodal (`.verifying-modal#simplemodal-data`
        "Aguarde enquanto processamos suas informações."). O `simplemodal.css` que
-       posiciona o modal NÃO carrega na página custom → sem isto ele renderiza em
-       fluxo, imprensado sob a logo. Forçamos overlay fixo centralizado na viewport.
-       `fixed` é relativo à viewport, então container + data centralizam juntos
-       mesmo aninhados (o container colapsa invisível). */
+       posiciona/esconde o modal NÃO carrega na página custom → sem isto a caixa
+       renderiza SEMPRE (vazia = quadrado branco no idle) e imprensada no fluxo.
+       Estratégia: esconder por padrão; mostrar como overlay fixo centralizado só
+       quando ESTÁ processando — sinalizado por (a) overlay do simplemodal presente
+       OU (b) o `#verifying_blurb` com texto. Idle (blurb vazio) → some. */
     #simplemodal-overlay {
       position: fixed !important; inset: 0 !important;
       background: rgba(61,46,34,0.35) !important;
@@ -94,7 +95,13 @@
       background: transparent !important; box-shadow: none !important;
       z-index: 41 !important;
     }
-    .verifying-modal, #simplemodal-data, .simplemodal-data {
+    .verifying-modal, #simplemodal-data, .simplemodal-data { display: none !important; }
+    #verifying_blurb:empty { display: none !important; }
+    body:has(#simplemodal-overlay) .verifying-modal,
+    body:has(#simplemodal-overlay) #simplemodal-data,
+    body:has(#simplemodal-overlay) .simplemodal-data,
+    .verifying-modal:has(#verifying_blurb:not(:empty)) {
+      display: block !important;
       position: fixed !important;
       top: 50% !important; left: 50% !important;
       transform: translate(-50%, -50%) !important;
